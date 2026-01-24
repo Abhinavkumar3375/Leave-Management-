@@ -1,0 +1,347 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Apply Leave</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 600px;
+        }
+
+        .form-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .hint-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+
+        .optional-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .optional-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .optional-text {
+            font-size: 14px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        .hidden-section {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-left: 3px solid #3498db;
+            border-radius: 5px;
+        }
+
+        .hidden-section.show {
+            display: block;
+        }
+
+        .reason-input {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .disclaimer {
+            background-color: #fffbea;
+            border: 1px solid #f39c12;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 25px 0;
+            font-size: 13px;
+            color: #7d6608;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .disclaimer.hidden {
+            display: none;
+        }
+
+        .disclaimer-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .close-disclaimer {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #7d6608;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .close-disclaimer:hover {
+            transform: scale(1.2);
+        }
+
+        .disclaimer-list {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .disclaimer-list li {
+            margin-bottom: 6px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+            flex: 1;
+        }
+
+        .btn-submit:hover {
+            background-color: #229954;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-cancel {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #7f8c8d;
+            color: white;
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 20px;
+            }
+
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn-submit, .btn-cancel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-card">
+            <h1 class="page-title">Apply for Leave</h1>
+            <p class="page-subtitle">Submit your leave request with your preferred dates</p>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer" id="disclaimerBox">
+                <div class="disclaimer-title">
+                    <span>⚠️ Important Information</span>
+                    <button type="button" class="close-disclaimer" onclick="closeDisclaimer()">×</button>
+                </div>
+                <ul class="disclaimer-list">
+                    <li>Leave requests must be submitted at least 3 days in advance</li>
+                    <li>You can suggest up to 2 alternative date plans</li>
+                    <li>Your manager will review and approve your request</li>
+                    <li>Approved leave cannot be cancelled within 24 hours of start date</li>
+                    <li>Unused leave may not carry over to the next year</li>
+                </ul>
+            </div>
+
+            <form method="post">
+                <!-- Primary Leave Plan -->
+                <div class="form-section">
+                    <div class="section-title">Preferred Leave Dates</div>
+                    <div class="date-range">
+                        <div class="form-group">
+                            <label class="form-label">From</label>
+                            <input class="form-control" type="date" name="plan1_from" required>
+                            <div class="hint-text">Start date of leave</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To</label>
+                            <input class="form-control" type="date" name="plan1_to" required>
+                            <div class="hint-text">End date of leave</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reason Field -->
+                <div class="form-section">
+                    <div class="section-title">Reason for Leave</div>
+                    <div class="form-group">
+                        <label class="form-label">Brief Description</label>
+                        <textarea class="form-control reason-input" name="reason" placeholder="Enter reason (optional)"></textarea>
+                        <div class="hint-text">Optional: Personal, medical, emergency, etc.</div>
+                    </div>
+                </div>
+
+                <!-- Alternative Plan Toggle -->
+                <div class="optional-toggle" onclick="toggleAlternativePlan()">
+                    <input type="checkbox" id="alternativePlanCheckbox">
+                    <span class="optional-text">+ Add alternative dates (optional)</span>
+                </div>
+
+                <!-- Alternative Leave Plan (Hidden by default) -->
+                <div class="hidden-section" id="alternativePlanSection">
+                    <div class="form-section">
+                        <div class="section-title">Alternative Leave Dates</div>
+                        <p style="font-size: 12px; color: #7f8c8d; margin-bottom: 15px;">If your preferred dates are not available, suggest alternative dates</p>
+                        <div class="date-range">
+                            <div class="form-group">
+                                <label class="form-label">From</label>
+                                <input class="form-control" type="date" name="plan2_from">
+                                <div class="hint-text">Alternative start date</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">To</label>
+                                <input class="form-control" type="date" name="plan2_to">
+                                <div class="hint-text">Alternative end date</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-group">
+                    <button type="submit" class="btn-submit">Submit Leave Request</button>
+                    <a href="/dashboard" class="btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleAlternativePlan() {
+            const checkbox = document.getElementById('alternativePlanCheckbox');
+            const section = document.getElementById('alternativePlanSection');
+            
+            if (checkbox.checked) {
+                section.classList.add('show');
+            } else {
+                section.classList.remove('show');
+            }
+        }
+
+        function closeDisclaimer() {
+            const disclaimer = document.getElementById('disclaimerBox');
+            disclaimer.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

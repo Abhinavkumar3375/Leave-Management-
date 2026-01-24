@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Central College Leave Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #003d7a;
+            --secondary: #b8860b;
+            --bg-light: #f8f9fa;
+            --text-dark: #2c3e50;
+            --text-light: #666;
+            --border-color: #e9ecef;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-light: #1a1a1a;
+            --text-dark: #e0e0e0;
+            --text-light: #a0a0a0;
+            --border-color: #333;
+            --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%23003d7a;stop-opacity:0.05" /><stop offset="100%" style="stop-color:%23b8860b;stop-opacity:0.05" /></linearGradient></defs><rect width="1200" height="800" fill="url(%23grad1)"/></svg>');
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* ===== HEADER & NAVIGATION ===== */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a5fa0 100%);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white !important;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-brand i {
+            font-size: 1.8rem;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            position: relative;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--primary) 0%, #1a5fa0 00%);
+        }
+
+        .hero-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            max-width: 900px;
+            padding: 20px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(0px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-icon {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: bounce 3s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero-icon i {
+            font-size: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            opacity: 0.95;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-tagline {
+            font-size: 1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn-primary-cta {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            color: var(--primary);
+        }
+
+        .btn-secondary-cta {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 38px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .btn-secondary-cta:hover {
+            background: white;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* ===== FEATURES SECTION ===== */
+        .features-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, rgba(248, 249, 250, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+        }
+
+        [data-theme="dark"] .features-section {
+            background: linear-gradient(180deg, rgba(26, 26, 26, 0.95) 0%, rgba(35, 35, 35, 0.98) 100%);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            text-align: center;
+            border-top: 4px solid var(--primary);
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: #2a2a2a;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 61, 122, 0.2);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), #1a5fa0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .feature-text {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* ===== QUICK LINKS SECTION ===== */
+        .quicklinks-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, rgba(0, 61, 122, 0.05) 0%, rgba(184, 134, 11, 0.05) 100%);
+            background-image: 
+                linear-gradient(135deg, rgba(0, 61, 122, 0.05) 0%, rgba(184, 134, 11, 0.05) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23003d7a" stroke-width="0.5" opacity="0.1"/></svg>');
+            background-attachment: fixed;
+        }
+
+        [data-theme="dark"] .quicklinks-section {
+            background: linear-gradient(135deg, rgba(0, 61, 122, 0.15) 0%, rgba(184, 134, 11, 0.15) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%23b8860b" stroke-width="0.5" opacity="0.1"/></svg>');
+            background-attachment: fixed;
+        }
+
+        .quicklinks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .quicklink-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        [data-theme="dark"] .quicklink-item {
+            background: #2a2a2a;
+        }
+
+        .quicklink-item:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quicklink-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .quicklink-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+        }
+
+        .quicklink-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ===== MODAL ===== */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 650px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 0.4s ease;
+        }
+
+        [data-theme="dark"] .modal-box {
+            background: #2a2a2a;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #1a5fa0 100%);
+            color: white;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 30px;
+            color: var(--text-dark);
+            line-height: 1.8;
+        }
+
+        .modal-body strong {
+            color: var(--primary);
+        }
+
+        .modal-body ul {
+            margin: 15px 0 15px 20px;
+            padding-left: 10px;
+        }
+
+        .modal-body li {
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        .highlight-box {
+            background: rgba(184, 134, 11, 0.1);
+            border-left: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: var(--text-dark);
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-text {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary-cta, .btn-secondary-cta {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .features-grid, .quicklinks-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i>
+                CTC Leave System
+            </a>
+            <div class="ms-auto">
+                <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero-section">
+        <img src="/static/Photos/1.jpg" alt="Campus" class="hero-background">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="hero-icon">
+                <i class="fas fa-leaf"></i>
+            </div>
+            <h1 class="hero-title">Central Training College  Telecom and IT</h1>
+            <p class="hero-subtitle">केंद्रीय प्रशिक्षण महाविद्यालय</p>
+            <p class="hero-tagline">Streamline your leave requests and manage your workforce efficiently with our secure and user-friendly leave management portal.</p>
+            <div class="hero-buttons">
+                <a href="/login" class="btn-primary-cta">
+                    <i class="fas fa-sign-in-alt"></i> Start Here
+                </a>
+                <button class="btn-secondary-cta" onclick="openModal('quick-start')">
+                    <i class="fas fa-arrow-right"></i> Learn More
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FEATURES SECTION ===== -->
+    <section class="features-section">
+        <h2 class="section-title">Key Features</h2>
+        <p class="section-subtitle">Everything you need to manage leaves efficiently</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3 class="feature-title">Quick Apply</h3>
+                <p class="feature-text">Apply for leave in just 3 simple steps with instant confirmation.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-pie"></i>
+                </div>
+                <h3 class="feature-title">Track Status</h3>
+                <p class="feature-text">Monitor all your leave requests in real-time with instant updates.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="feature-title">Secure & Safe</h3>
+                <p class="feature-text">Your data is encrypted and protected with advanced security measures.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== QUICK LINKS SECTION ===== -->
+    <section class="quicklinks-section">
+        <h2 class="section-title">Quick Access</h2>
+        <p class="section-subtitle">Get started in seconds</p>
+        <div class="quicklinks-grid">
+            <a href="#" class="quicklink-item" onclick="openModal('quick-start')">
+                <div class="quicklink-icon"><i class="fas fa-rocket"></i></div>
+                <div class="quicklink-title">Quick Start</div>
+                <div class="quicklink-desc">Get up and running</div>
+            </a>
+            <a href="#" class="quicklink-item" onclick="openModal('about-college')">
+                <div class="quicklink-icon"><i class="fas fa-building"></i></div>
+                <div class="quicklink-title">About College</div>
+                <div class="quicklink-desc">Learn about us</div>
+            </a>
+            <a href="#" class="quicklink-item" onclick="openModal('guidelines')">
+                <div class="quicklink-icon"><i class="fas fa-rules"></i></div>
+                <div class="quicklink-title">Guidelines</div>
+                <div class="quicklink-desc">Policy & rules</div>
+            </a>
+            <a href="#" class="quicklink-item" onclick="openModal('contact')">
+                <div class="quicklink-icon"><i class="fas fa-phone"></i></div>
+                <div class="quicklink-title">Contact Us</div>
+                <div class="quicklink-desc">Get in touch</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===== MODAL ===== -->
+    <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <i id="modalIcon" class="fas fa-info-circle"></i>
+                    <span id="modalTitle">Information</span>
+                </h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                Content will appear here
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text"><strong>Central Training College  Telecom and IT, Ranchi</strong></p>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Support</a>
+            </div>
+            <div class="footer-bottom">
+                <p><i class="fas fa-copyright"></i> 2024 Central Training College Telecom and IT. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ===== DARK MODE TOGGLE =====
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        // Load theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        // ===== MODAL FUNCTIONALITY =====
+        const modalData = {
+            'quick-start': {
+                title: 'Quick Start Guide',
+                icon: 'fas fa-rocket',
+                content: `
+                    <p><strong>Welcome to Central Training College Telecom and IT Leave Management System!</strong></p>
+                    <p>Here's how to get started:</p>
+                    <ul>
+                        <li><strong>Step 1:</strong> Click "Start Here" button to login</li>
+                        <li><strong>Step 2:</strong> Enter your credentials</li>
+                        <li><strong>Step 3:</strong> Navigate to "Apply Leave"</li>
+                        <li><strong>Step 4:</strong> Fill in your leave details</li>
+                        <li><strong>Step 5:</strong> Submit and track status</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <strong>💡 Tip:</strong> Always check your leave balance before applying!
+                    </div>
+                `
+            },
+            'about-college': {
+                title: 'About Central Training College',
+                icon: 'fas fa-building',
+                content: `
+                    <p><strong>Central Training College Telecom and IT, Ranchi</strong> is a premier institution dedicated to providing excellent training and IT education.</p>
+                    <p>Our college is committed to developing skilled professionals in the field of technology and professional development.</p>
+                    <p>Established with a vision to empower individuals through quality education, we offer comprehensive training programs and IT courses.</p>
+                    <div class="highlight-box">
+                        <strong>Location:</strong> Ranchi, Jharkhand<br>
+                        <strong>Focus:</strong> Training & Information Technology<br>
+                        <strong>Mission:</strong> Excellence in Education
+                    </div>
+                `
+            },
+            'guidelines': {
+                title: 'Leave Policy Guidelines',
+                icon: 'fas fa-rules',
+                content: `
+                    <p><strong>Important Leave Guidelines:</strong></p>
+                    <ul>
+                        <li>Minimum 3 days advance notice required for leave</li>
+                        <li>Maximum 2 alternative dates allowed per request</li>
+                        <li>Leave year runs from January 1 to December 31</li>
+                        <li>Casual leave: 5 days per month</li>
+                        <li>Sick leave: 3 days per month</li>
+                        <li>Emergency leaves require HR approval</li>
+                        <li>Unused leaves do not carry forward</li>
+                    </ul>
+                    <div class="highlight-box">
+                        For detailed leave policy, contact your HR department.
+                    </div>
+                `
+            },
+            'contact': {
+                title: 'Contact Information',
+                icon: 'fas fa-phone',
+                content: `
+                    <p><strong>Get in touch with us:</strong></p>
+                    <ul>
+                        <li><strong>Email:</strong> support@ctcranchi.edu</li>
+                        <li><strong>Phone:</strong> +91-651-XXX-XXXX</li>
+                        <li><strong>Address:</strong> Central Training College, Ranchi, Jharkhand</li>
+                        <li><strong>Office Hours:</strong> 9:00 AM - 5:00 PM (Monday-Friday)</li>
+                    </ul>
+                    <div class="highlight-box">
+                        For urgent matters, use the emergency contact line available 24/7.
+                    </div>
+                `
+            }
+        };
+
+        function openModal(type) {
+            event.preventDefault();
+            const data = modalData[type];
+            if (!data) return;
+
+            document.getElementById('modalIcon').className = data.icon;
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalBody').innerHTML = data.content;
+            document.getElementById('modalBackdrop').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modalBackdrop').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+            if (e.target.id === 'modalBackdrop') closeModal();
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+
+</html>

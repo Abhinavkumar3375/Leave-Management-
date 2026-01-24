@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - Leave Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --glass: rgba(255,255,255,0.2);
+            --primary: #003d7a;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: "Poppins", sans-serif;
+            background: #002147;
+            color: #fff;
+        }
+
+        .hero-bg {
+            background: url('/static/Photos/1.png') center/cover no-repeat;
+            height: 45vh;
+            width: 100%;
+            filter: brightness(90%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .top-nav {
+            width: 100%;
+            background: rgba(255,255,255,0.3);
+            padding: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #000;
+            z-index: 1000;
+        }
+
+        .welcome-bar {
+            margin-top: 45px;
+            width: 100%;
+            padding: 10px 20px;
+            backdrop-filter: blur(12px);
+            background: rgba(255,255,255,0.2);
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            color: #000;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .logout-btn {
+            background: #d72323;
+            padding: 6px 12px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: #a01717;
+        }
+
+        .menu-bar {
+            width: 100%;
+            margin-top: 290px;
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            padding: 8px 10px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .menu-bar a {
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .menu-bar a:hover {
+            background: #02b3ff;
+            color: #fff;
+        }
+
+        .content-box {
+            margin-top: 160px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 75%;
+            background: rgba(0,0,0,0.2);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.35);
+            padding: 25px;
+            border-radius: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            padding: 18px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            background: #02b3ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(2, 179, 255, 0.3);
+        }
+
+        .stat-card i {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .stat-card span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+
+        #deptBox {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.4);
+            display: none;
+        }
+
+        .dept-header {
+            background: linear-gradient(135deg, #02b3ff, #0080cc);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        table td, table th {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .table-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 8px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        .btn-action {
+            background: #ff9d00;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            transition: 0.2s;
+            margin: 2px;
+        }
+
+        .btn-action:hover {
+            background: #e68900;
+            transform: scale(1.05);
+        }
+
+        .btn-approve {
+            background: #28a745 !important;
+        }
+
+        .btn-approve:hover {
+            background: #218838 !important;
+        }
+
+        .btn-reject {
+            background: #dc3545 !important;
+        }
+
+        .btn-reject:hover {
+            background: #c82333 !important;
+        }
+
+        .btn-reset {
+            background: #ffc107 !important;
+            color: #000 !important;
+        }
+
+        .btn-reset:hover {
+            background: #e0a800 !important;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .status-approved {
+            background: rgba(40,167,69,0.9);
+            color: white;
+        }
+
+        .status-rejected {
+            background: rgba(220,53,69,0.9);
+            color: white;
+        }
+
+        .status-pending {
+            background: rgba(0,150,255,0.9);
+            color: white;
+        }
+
+        .rule-item {
+            background: rgba(255,255,255,0.9);
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        #rulesBox {
+            display: none;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            transition: 0.2s;
+            margin-bottom: 15px;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 20px;
+            color: #000;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+            color: #02b3ff;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-box {
+                width: 95%;
+            }
+
+            .menu-bar {
+                margin-top: 200px;
+            }
+
+            .welcome-bar {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="hero-bg"></div>
+    <header class="top-nav">Central  College </header>
+
+    <div class="welcome-bar">
+        <span>👋 Welcome, <strong>{{ name }}</strong> | Role: <strong>{{ role|upper }}</strong> | Dept: <strong>{{ dept }}</strong></span>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    <!-- EMPLOYEE MENU -->
+    {% if role == 'employee' %}
+    <div class="menu-bar">
+        <a href="/apply_leave"><i class="fas fa-plus"></i> Apply Leave</a>
+        <a href="/my_leaves"><i class="fas fa-list"></i> My Leaves</a>
+        <a href="/reports"><i class="fas fa-file"></i> Reports</a>
+        <a href="javascript:void(0)" onclick="showRules()"><i class="fas fa-book"></i> Rules of Leave</a>
+    </div>
+    {% endif %}
+
+    <!-- ADMIN MENU -->
+    {% if role == 'admin' %}
+    <div class="menu-bar">
+        <a href="/manage_leaves"><i class="fas fa-tasks"></i> Manage Leaves</a>
+        <a href="/reports"><i class="fas fa-file"></i> Reports</a>
+        <a href="javascript:void(0)" onclick="showRules()"><i class="fas fa-book"></i> Rules of Leave</a>
+    </div>
+    {% endif %}
+
+    <!-- SUPERADMIN MENU -->
+    {% if role == 'superadmin' %}
+    <div class="menu-bar">
+        <a href="/users"><i class="fas fa-users"></i> All Users</a>
+        <a href="/user/add"><i class="fas fa-user-plus"></i> Add User</a>
+        <a href="/upload_users"><i class="fas fa-upload"></i> Bulk Upload</a>
+        <a href="/manage_leaves"><i class="fas fa-tasks"></i> All Leaves</a>
+        <a href="/reports"><i class="fas fa-file"></i> Reports</a>
+        <a href="javascript:void(0)" onclick="showRules()"><i class="fas fa-book"></i> Rules of Leave</a>
+    </div>
+    {% endif %}
+
+    <!-- DASHBOARD CONTENT -->
+    <div class="content-box" id="dashboardBox">
+        <h4><b>📊 Home / Dashboard</b></h4>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div>Total Users</div>
+                <span id="totalUsersCount">{{ stats.total_users }}</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar"></i>
+                <div>Casual Leave</div>
+                <span>15 Days</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-check"></i>
+                <div>Earned Leave</div>
+                <span>60 Days</span>
+            </div>
+        </div>
+
+
+
+        <!-- Department Section for Admin/SuperAdmin -->
+        {% if role in ['admin','superadmin'] %}
+        <div class="stats-grid" style="margin-top: 25px;">
+            <div class="stat-card" onclick="showDept('FIT')"><i class="fas fa-building"></i> FIT</div>
+            <div class="stat-card" onclick="showDept('FFC')"><i class="fas fa-building"></i> FFC</div>
+            <div class="stat-card" onclick="showDept('FCE')"><i class="fas fa-building"></i> FCE</div>
+            <div class="stat-card" onclick="showDept('FC')"><i class="fas fa-building"></i> FC</div>
+            <div class="stat-card" onclick="showDept('HQ')"><i class="fas fa-building"></i> HQ</div>
+        </div>
+
+        <!-- Employee Quick Info -->
+        <div style="margin-top: 25px; background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #ffc107;">
+            <h6><b>⚙️ Admin Permissions</b></h6>
+            <p style="margin-bottom: 10px;">You can manage:</p>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>Leave approvals for your department ({{ dept }})</li>
+                <li>Generate department reports</li>
+                <li>View department statistics</li>
+            </ul>
+        </div>
+        {% endif %}
+
+        <!-- Employee Quick Info -->
+        {% if role == 'employee' %}
+        <div style="margin-top: 25px; background: rgba(255,255,255,0.15); padding: 15px; border-radius: 10px; border-left: 4px solid #02b3ff;">
+            <h6><b>📋 Quick Actions</b></h6>
+            <p style="margin-bottom: 10px;">Use the menu above to:</p>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>Apply for new leave</li>
+                <li>View your leave history</li>
+                <li>Download leave reports</li>
+                <li>Check leave balance</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- DEPARTMENT VIEW WITH LEAVES -->
+    <div class="content-box" id="deptBox">
+        <button class="back-btn" onclick="backDashboard()"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+        
+        <div class="dept-header">
+            <h4 style="margin: 0;"><i class="fas fa-building"></i> <span id="deptName">Department</span> - Leave Requests</h4>
+            <p style="margin: 5px 0 0 0; font-size: 0.95rem;">Total Employees: <strong id="totalEmp">0</strong> | Total Leaves: <strong id="totalLeaves">0</strong></p>
+        </div>
+
+        <div class="table-container">
+            <table class="table bg-white text-center table-sm" style="margin: 0;">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+                        <th>Employee</th>
+                        <th>Rank</th>
+                        <th>Plan 1</th>
+                        <th>Plan 2</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="leavesTable">
+                    <tr><td colspan="8" style="text-align: center; padding: 20px;">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner"></i>
+                            <p>Loading leave requests...</p>
+                        </div>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- RULES BOX -->
+    <div id="rulesBox" style="margin-top: 160px; width: 75%; margin-left: auto; margin-right: auto; background: rgba(0,0,0,0.2); padding: 25px; border-radius: 15px; display: none;">
+        <h4><b>📜 Leave Rules & Guidelines</b></h4><br>
+
+        <div class="rule-item">1️⃣ Casual leave is for urgent personal work - minimum 3 days notice required</div>
+        <div class="rule-item">2️⃣ Earned leave must be applied well in advance for approval</div>
+        <div class="rule-item">3️⃣ Medical leave requires medical certificate if more than 2 days</div>
+        <div class="rule-item">4️⃣ Cannot apply leave if balance doesn't exist in your account</div>
+        <div class="rule-item">5️⃣ More than 3 consecutive leaves need department head approval</div>
+        <div class="rule-item">6️⃣ Emergency leave must be informed to HR on the same day</div>
+        <div class="rule-item">7️⃣ Earned leave can carry forward to next financial year</div>
+        <div class="rule-item">8️⃣ Always provide valid emergency contact number</div>
+
+        <button class="back-btn" onclick="backDashboard()" style="width: 100%; margin-top: 15px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+    </div>
+
+    <script>
+        function showDept(dept) {
+            document.getElementById('dashboardBox').style.display = 'none';
+            document.getElementById('deptBox').style.display = 'block';
+            document.getElementById('deptName').textContent = dept;
+            
+            // Fetch department leave requests
+            fetch(`/api/department-leaves/${dept}`)
+                .then(response => response.json())
+                .then(data => {
+                    const leaves = data.leaves || [];
+                    
+                    document.getElementById('totalEmp').textContent = data.total_employees || 381;
+                    document.getElementById('totalLeaves').textContent = leaves.length;
+                    
+                    let tableHTML = '';
+                    if(leaves.length === 0) {
+                        tableHTML = '<tr><td colspan="8" style="color: #000; padding: 20px; text-align: center;"><i class="fas fa-info-circle"></i> No leave requests in this department</td></tr>';
+                    } else {
+                        leaves.forEach(leave => {
+                            let statusBadge = 'status-pending';
+                            if(leave.status === 'Approved') statusBadge = 'status-approved';
+                            else if(leave.status === 'Rejected') statusBadge = 'status-rejected';
+                            
+                            let actionBtns = '';
+                            if(leave.status === 'Approved' || leave.status === 'Rejected') {
+                                actionBtns = `
+                                    <form method="post" action="/change_status/${leave.id}/Pending" style="display: inline;">
+                                        <button type="submit" class="btn-action btn-reset btn-sm" onclick="return confirm('Reset to Pending?')">
+                                            <i class="fas fa-redo"></i> Reset
+                                        </button>
+                                    </form>
+                                `;
+                            } else {
+                                actionBtns = `
+                                    <form method="post" action="/change_status/${leave.id}/Approved" style="display: inline;">
+                                        <button type="submit" class="btn-action btn-approve btn-sm" onclick="return confirm('Approve this leave?')">
+                                            <i class="fas fa-check"></i> Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" action="/change_status/${leave.id}/Rejected" style="display: inline;">
+                                        <button type="submit" class="btn-action btn-reject btn-sm" onclick="return confirm('Reject this leave?')">
+                                            <i class="fas fa-times"></i> Reject
+                                        </button>
+                                    </form>
+                                `;
+                            }
+                            
+                            tableHTML += `
+                                <tr>
+                                    <td style="color: #000; font-weight: 600;">#${leave.id}</td>
+                                    <td style="color: #000; font-weight: 600;">${leave.employee_name}</td>
+                                    <td style="color: #666;">${leave.rank}</td>
+                                    <td style="color: #000; font-size: 0.9rem;"><i class="fas fa-arrow-right"></i> ${leave.plan1_from} to ${leave.plan1_to}</td>
+                                    <td style="color: #000; font-size: 0.9rem;">
+                                        ${leave.plan2_from && leave.plan2_to ? '<i class="fas fa-arrow-right"></i> ' + leave.plan2_from + ' to ' + leave.plan2_to : '—'}
+                                    </td>
+                                    <td style="color: #000; font-size: 0.9rem;">${leave.reason ? leave.reason.substring(0, 20) + '...' : '—'}</td>
+                                    <td>
+                                        <span class="status-badge ${statusBadge}">
+                                            ${leave.status}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+                                            ${actionBtns}
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                    }
+                    document.getElementById('leavesTable').innerHTML = tableHTML;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('leavesTable').innerHTML = '<tr><td colspan="8" style="color: #000;">Error loading data</td></tr>';
+                });
+        }
+
+        function showRules() {
+            document.getElementById('dashboardBox').style.display = 'none';
+            document.getElementById('deptBox').style.display = 'none';
+            document.getElementById('rulesBox').style.display = 'block';
+        }
+
+        function backDashboard() {
+            document.getElementById('rulesBox').style.display = 'none';
+            document.getElementById('deptBox').style.display = 'none';
+            document.getElementById('dashboardBox').style.display = 'block';
+        }
+    </script>
+
+</body>
+
+</html>

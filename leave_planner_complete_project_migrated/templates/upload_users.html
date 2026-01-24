@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Upload Users</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .upload-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .csv-format {
+            background: #f7fafc;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .csv-format code {
+            color: #764ba2;
+            font-size: 13px;
+            font-weight: 500;
+            word-break: break-all;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f7fafc;
+        }
+
+        .file-input-label:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .file-input-label.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            color: #667eea;
+            margin-right: 12px;
+        }
+
+        .file-label-text {
+            text-align: left;
+        }
+
+        .file-label-main {
+            color: #2d3748;
+            font-weight: 600;
+            font-size: 15px;
+            display: block;
+        }
+
+        .file-label-sub {
+            color: #718096;
+            font-size: 13px;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .file-name {
+            color: #667eea;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn-upload {
+            flex: 1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-upload:active {
+            transform: translateY(0);
+        }
+
+        .btn-back {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-back:hover {
+            background: #cbd5e0;
+            color: #2d3748;
+            text-decoration: none;
+        }
+
+        .helper-text {
+            font-size: 12px;
+            color: #a0aec0;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .upload-container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .file-input-label {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <div class="header-section">
+            <div class="header-icon">
+                <i class="fas fa-upload"></i>
+            </div>
+            <h1>Import Users</h1>
+            <p class="subtitle">Upload a CSV file to add multiple users to your system</p>
+            <div class="csv-format">
+                <code><i class="fas fa-file-csv"></i> name, unique_id, department, password</code>
+            </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-section">
+                <div class="file-input-wrapper">
+                    <input type="file" name="file" id="fileInput" accept=".csv" required>
+                    <label for="fileInput" class="file-input-label">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <div class="file-label-text">
+                            <span class="file-label-main">Click to upload or drag & drop</span>
+                            <span class="file-label-sub">CSV files only</span>
+                        </div>
+                    </label>
+                    <div class="file-name" id="fileName"></div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-upload">
+                    <i class="fas fa-check-circle"></i>
+                    Upload
+                </button>
+                <a href="/dashboard" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Back
+                </a>
+            </div>
+
+            <p class="helper-text">Password field is optional. Maximum file size: 10MB</p>
+        </form>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const label = document.querySelector('.file-input-label');
+        const fileName = document.getElementById('fileName');
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                fileName.textContent = `✓ ${e.target.files[0].name}`;
+            }
+        });
+
+        label.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            label.classList.add('active');
+        });
+
+        label.addEventListener('dragleave', () => {
+            label.classList.remove('active');
+        });
+
+        label.addEventListener('drop', (e) => {
+            e.preventDefault();
+            label.classList.remove('active');
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                fileName.textContent = `✓ ${e.dataTransfer.files[0].name}`;
+            }
+        });
+    </script>
+</body>
+</html>

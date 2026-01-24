@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>College Reports | Leave System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(90deg, #4e5bff, #8d42ff);
+            --shadow: 0 4px 15px rgba(0,0,0,0.10);
+            --shadow-sm: 0px 3px 10px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f4ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2c3e50;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #2c3e50;
+            color: white;
+            min-height: 100vh;
+            padding: 30px 0;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 30px;
+        }
+
+        .sidebar-logo {
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            padding: 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            color: white;
+            background-color: rgba(255,255,255,0.1);
+            border-left-color: #4e5bff;
+        }
+
+        .sidebar-nav a.active {
+            color: white;
+            background-color: #4e5bff;
+            border-left-color: white;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 250px;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .top-bar-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4e5bff, #8d42ff);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .content-area {
+            padding: 30px;
+        }
+
+        .page-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .page-header i {
+            font-size: 30px;
+        }
+
+        /* Filter Box */
+        .filter-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-select {
+            border: 1px solid #bdc3c7;
+            border-radius: 8px;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .form-select:focus {
+            border-color: #4e5bff;
+            box-shadow: 0 0 0 0.2rem rgba(78, 91, 255, 0.25);
+        }
+
+        /* Button Sections */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-back {
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .btn-back:hover {
+            background-color: #7f8c8d;
+            color: white;
+            text-decoration: none;
+        }
+
+        .download-btns {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 10px 18px;
+            font-size: 14px;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-export-csv {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .btn-export-csv:hover {
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-export-excel {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-export-excel:hover {
+            background-color: #229954;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+        }
+
+        .btn-export-pdf {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .btn-export-pdf:hover {
+            background-color: #c0392b;
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+        }
+
+        /* Table Card */
+        .card-custom {
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            background: white;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 20px;
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-wrapper {
+            padding: 20px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            border: 1px solid #ecf0f1;
+            padding: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            padding: 14px 15px;
+            border: 1px solid #ecf0f1;
+            vertical-align: middle;
+            font-size: 14px;
+            color: #34495e;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-approved {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-text {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #7f8c8d;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            margin-top: 40px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+                padding: 15px 0;
+            }
+
+            .main-wrapper {
+                margin-left: 0;
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .download-btns {
+                width: 100%;
+            }
+
+            .btn-export {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .page-header {
+                font-size: 20px;
+                padding: 15px 20px;
+            }
+
+            .table-wrapper {
+                padding: 10px;
+            }
+
+            .table thead th,
+            .table tbody td {
+                padding: 10px 8px;
+                font-size: 12px;
+            }
+
+            .content-area {
+                padding: 15px;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-graduation-cap"></i>
+                HR System
+            </div>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="/my_leaves"><i class="fas fa-calendar-days"></i> My Leaves</a></li>
+            <li><a href="/apply_leave"><i class="fas fa-plus"></i> Apply Leave</a></li>
+            <li><a href="/reports" class="active"><i class="fas fa-file-chart-line"></i> Reports</a></li>
+            
+            
+            <li><a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-title">College Leave Management</div>
+            <div class="user-section">
+                <span>Admin User</span>
+                <div class="user-avatar">A</div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <i class="fas fa-chart-bar"></i>
+                Student Leave Reports
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-box">
+                <div class="filter-title">
+                    <i class="fas fa-filter"></i>
+                    Filter Reports
+                </div>
+                <form class="row g-3" method="GET" action="/reports">
+                    <div class="col-md-8">
+                        <select class="form-select" name="department">
+                            <option selected disabled>Select Department</option>
+                            <option value="">All Departments</option>
+                            <option value="HR">HR</option>
+                            <option value="Administration">Administration</option>
+                            <option value="Operation">Operation</option>
+                            <option value="IT">IT</option>
+                            <option value="Finance">Finance</option>
+                            <option value="Security">Security</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-search"></i> Apply Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <a class="btn-back" href="/dashboard">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <div class="download-btns">
+                    <a class="btn-export btn-export-csv" href="/export/csv">
+                        <i class="fas fa-file-csv"></i> CSV
+                    </a>
+                    <a class="btn-export btn-export-excel" href="/export/excel">
+                        <i class="fas fa-file-excel"></i> Excel
+                    </a>
+                    <a class="btn-export btn-export-pdf" href="/export/pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+            </div>
+
+            <!-- Reports Table -->
+            <div class="card-custom">
+                <div class="table-header">
+                    <i class="fas fa-table"></i>
+                    Leave Records
+                </div>
+                <div class="table-wrapper">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>IRLA / Force No</th>
+                                    <th>Student Name</th>
+                                    <th>Department</th>
+                                    <th>Plan 1 From</th>
+                                    <th>Plan 1 To</th>
+                                    <th>Plan 2 From</th>
+                                    <th>Plan 2 To</th>
+                                    <th>Reason</th>
+                                    <th>Status</th>
+                                    <th>Applied On</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if rows %}
+                                    {% for r in rows %}
+                                    <tr>
+                                        <td>#{{ r.id }}</td>
+                                        <td>{{ r.IRLAForceNo }}</td>
+                                        <td>{{ r.employee_name }}</td>
+                                        <td>{{ r.department }}</td>
+                                        <td>{{ r.plan1_from }}</td>
+                                        <td>{{ r.plan1_to }}</td>
+                                        <td>{{ r.plan2_from }}</td>
+                                        <td>{{ r.plan2_to }}</td>
+                                        <td>{{ r.reason }}</td>
+                                        <td>
+                                            <span class="status-badge 
+                                                {% if r.status|lower == 'approved' %}badge-approved
+                                                {% elif r.status|lower == 'pending' %}badge-pending
+                                                {% elif r.status|lower == 'rejected' %}badge-rejected
+                                                {% endif %}">
+                                                {{ r.status }}
+                                            </span>
+                                        </td>
+                                        <td>{{ r.applied_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="11">
+                                        <div class="empty-state">
+                                            <div class="empty-icon">
+                                                <i class="fas fa-inbox"></i>
+                                            </div>
+                                            <div class="empty-text">No Records Found</div>
+                                            <p style="color: #bdc3c7; font-size: 13px;">No leave reports available for the selected filter. Try adjusting your search criteria.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Summary (Optional Stats) -->
+            <div class="row mt-4" style="display: none;">
+                <div class="col-md-3 mb-3">
+                    <div class="card-custom">
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-check-circle" style="font-size: 32px; color: #27ae60; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #27ae60;">45</div>
+                            <div style="color: #7f8c8d; font-size: 14px;">Approved</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card-custom">
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-clock" style="font-size: 32px; color: #f39c12; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #f39c12;">12</div>
+                            <div style="color: #7f8c8d; font-size: 14px;">Pending</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card-custom">
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-times-circle" style="font-size: 32px; color: #e74c3c; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #e74c3c;">3</div>
+                            <div style="color: #7f8c8d; font-size: 14px;">Rejected</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card-custom">
+                        <div style="text-align: center; padding: 20px;">
+                            <i class="fas fa-users" style="font-size: 32px; color: #3498db; margin-bottom: 10px;"></i>
+                            <div style="font-size: 24px; font-weight: 700; color: #3498db;">60</div>
+                            <div style="color: #7f8c8d; font-size: 14px;">Total Students</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><i class="fas fa-info-circle"></i> &copy; 2024 College HR Management System. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+
+</html>

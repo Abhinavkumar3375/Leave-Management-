@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Manage Leaves</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --glass-bg: rgba(255,255,255,0.14);
+      --glass-dark-bg: rgba(0,0,0,0.25);
+      --text-color: #fff;
+      --card-shadow: rgba(0,0,0,0.25);
+      --border-radius: 18px;
+      --primary: #007bff;
+      --success: #28a745;
+      --danger: #dc3545;
+      --warning: #ffc107;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-image: url('/static/Photos/1.jpg');
+      animation: bgSlide 30s infinite ease-in-out;
+      font-family: "Poppins", sans-serif;
+      color: var(--text-color);
+      padding-top: 100px;
+      padding-bottom: 40px;
+    }
+
+    @keyframes bgSlide {
+      0%   { background-image: url('/static/Photos/1.jpg'); }
+      33%  { background-image: url('/static/Photos/1.jpg'); }
+      66%  { background-image: url('/static/Photos/1.jpg'); }
+      100% { background-image: url('/static/Photos/1.jpg'); }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(4px) brightness(0.92);
+      -webkit-backdrop-filter: blur(4px) brightness(0.92);
+      z-index: -1;
+    }
+
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255,255,255,0.35);
+      padding: 14px 30px;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .top-nav h3 {
+      margin: 0;
+      flex: 1;
+      text-align: center;
+    }
+
+    .nav-stats {
+      display: flex;
+      gap: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      align-items: center;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 15px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    .glass {
+      width: 92%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px;
+      border-radius: var(--border-radius);
+      background: rgba(0, 0, 0, 0.5) !important;
+      backdrop-filter: blur(8px) saturate(120%) !important;
+      -webkit-backdrop-filter: blur(8px) saturate(120%) !important;
+      border: 1px solid rgba(0, 0, 0, 0.6) !important;
+      box-shadow: 0 8px 30px var(--card-shadow);
+      animation: slideInUp 0.6s ease-out;
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .header-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #060606;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .search-box input {
+      background: none;
+      border: none;
+      color: white;
+      outline: none;
+      width: 200px;
+      font-size: 0.9rem;
+    }
+
+    .search-box input::placeholder {
+      color: rgba(255,255,255,0.6);
+    }
+
+    .filter-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .filter-badge.active {
+      background: rgba(255,255,255,0.4);
+      border-color: white;
+      font-weight: 600;
+    }
+
+    .btn-dashboard {
+      background: rgba(255,255,255,0.85) !important;
+      color: #000 !important;
+      border: 1px solid rgba(0,0,0,0.2) !important;
+      border-radius: 8px !important;
+      padding: 8px 16px !important;
+      font-weight: 600 !important;
+      transition: all 0.3s !important;
+      cursor: pointer;
+    }
+
+    .btn-dashboard:hover {
+      background: rgba(255,255,255,0.4) !important;
+      transform: scale(1.05);
+    }
+
+    /* Table Styles */
+    .table-responsive {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table {
+      color: #fff;
+      background: rgba(255,255,255,0.12) !important;
+      backdrop-filter: blur(6px) !important;
+      border-radius: 10px;
+      margin-bottom: 0;
+    }
+
+    .table thead {
+      background: rgba(0,0,0,0.6);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    .table thead th {
+      padding: 16px;
+      border: none;
+      vertical-align: middle;
+    }
+
+    .table tbody td {
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      vertical-align: middle;
+    }
+
+    .table-hover tbody tr {
+      transition: all 0.3s ease;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .table-hover tbody tr:hover {
+      background: rgba(255,255,255,0.25) !important;
+      transform: scale(1.01);
+      box-shadow: inset 0 0 10px rgba(255,255,255,0.1);
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .status-approved {
+      background: rgba(40,167,69,0.9);
+      box-shadow: 0 4px 15px rgba(40,167,69,0.3);
+    }
+
+    .status-rejected {
+      background: rgba(220,53,69,0.9);
+      box-shadow: 0 4px 15px rgba(220,53,69,0.3);
+    }
+
+    .status-pending {
+      background: rgba(0,150,255,0.9);
+      box-shadow: 0 4px 15px rgba(0,150,255,0.3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Action Buttons */
+    .action-cell {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      border-radius: 8px !important;
+      padding: 6px 12px !important;
+      font-weight: 600 !important;
+      font-size: 0.8rem !important;
+      border: none !important;
+      cursor: pointer;
+      transition: all 0.3s !important;
+      color: white !important;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .btn-approve {
+      background: linear-gradient(135deg, #28a745, #20c997) !important;
+    }
+
+    .btn-reject {
+      background: linear-gradient(135deg, #dc3545, #fd7e14) !important;
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #ffc107, #fd7e14) !important;
+      color: #000 !important;
+      font-weight: 700 !important;
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Modal Dialog */
+    .modal-backdrop {
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: rgba(255,255,255,0.95);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 15px;
+      backdrop-filter: blur(8px);
+    }
+
+    /* Employee Info Tooltip */
+    .employee-info {
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .employee-info:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.05);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .empty-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      opacity: 0.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .glass {
+        padding: 20px;
+        width: 95%;
+      }
+
+      .header-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-controls {
+        width: 100%;
+      }
+
+      .search-box input {
+        width: 150px;
+      }
+
+      .table {
+        font-size: 0.8rem;
+      }
+
+      .table thead th,
+      .table tbody td {
+        padding: 10px;
+      }
+
+      .action-cell {
+        flex-direction: column;
+      }
+
+      .btn-action {
+        justify-content: center;
+      }
+
+      .top-nav {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px 15px;
+      }
+
+      .nav-stats {
+        gap: 15px;
+        font-size: 0.6rem;
+      }
+    }
+
+    /* Loading Animation */
+    .row-loading {
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+  </style>
+</head>
+
+<body>
+<header class="top-nav">
+  <h3 class="fw-bold">📋 Central College </h3>
+  <div class="nav-stats">
+    <div class="stat-item">
+      <i class="fas fa-check-circle" style="color: #28a745;"></i>
+      <span>Approved: <strong id="approvedCount">0</strong></span>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-hourglass" style="color: #0096ff;"></i>
+      <span>Pending: <strong id="pendingCount">0</strong></span>
+    </div>
+    <div class="stat-item">
+      <i class="fas fa-times-circle" style="color: #dc3545;"></i>
+      <span>Rejected: <strong id="rejectedCount">0</strong></span>
+    </div>
+  </div>
+  <a class="btn-dashboard" href="/dashboard"><i class="fas fa-arrow-left"></i> Dashboard</a>
+</header>
+
+<div class="glass">
+  <div class="header-section">
+    <div class="header-title">
+      <i class="fas fa-tasks"></i> Manage Leave Requests
+    </div>
+    <div class="header-controls">
+      <div class="search-box">
+        <i class="fas fa-search" style="color: rgba(255,255,255,0.7);"></i>
+        <input type="text" id="searchInput" placeholder="Search employee...">
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <div class="filter-badge active" onclick="filterByStatus('All')">All</div>
+        <div class="filter-badge" onclick="filterByStatus('Pending')">Pending</div>
+        <div class="filter-badge" onclick="filterByStatus('Approved')">Approved</div>
+        <div class="filter-badge" onclick="filterByStatus('Rejected')">Rejected</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-hover table-bordered text-center align-middle" id="leavesTable">
+      <thead>
+        <tr>
+          <th><i class="fas fa-hashtag"></i> ID</th>
+          <th><i class="fas fa-user"></i> Employee</th>
+          <th><i class="fas fa-building"></i> Department</th>
+          <th><i class="fas fa-calendar"></i> Plan 1</th>
+          <th><i class="fas fa-calendar"></i> Plan 2</th>
+          <th><i class="fas fa-comment"></i> Reason</th>
+          <th><i class="fas fa-info-circle"></i> Status</th>
+          <th><i class="fas fa-cogs"></i> Action</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody">
+      {% if rows %}
+        {% for r in rows %}
+        <tr data-status="{{ r.status }}" data-employee="{{ r.employee_name or '' }}">
+          <td>#{{ r.id }}</td>
+          <td>
+            <div class="employee-info" title="{{ r.employee_name if r.employee_name else '—' }}">
+              <i class="fas fa-user-circle"></i> {{ r.employee_name if r.employee_name else '—' }}
+            </div>
+          </td>
+          <td>{{ r.department }}</td>
+          <td>
+            <small>
+              <i class="fas fa-arrow-right"></i> {{ r.plan1_from }} to {{ r.plan1_to }}
+            </small>
+          </td>
+          <td>
+            <small>
+              {% if r.plan2_from and r.plan2_to %}
+                <i class="fas fa-arrow-right"></i> {{ r.plan2_from }} to {{ r.plan2_to }}
+              {% else %}
+                <span style="opacity: 0.5;">—</span>
+              {% endif %}
+            </small>
+          </td>
+          <td>
+            <span title="{{ r.reason }}" style="cursor: help;">
+              {{ r.reason|truncate(20) if r.reason else '—' }}
+            </span>
+          </td>
+          <td>
+            {% if r.status == 'Approved' %}
+              <span class="status-badge status-approved"><i class="fas fa-check"></i> Approved</span>
+            {% elif r.status == 'Rejected' %}
+              <span class="status-badge status-rejected"><i class="fas fa-times"></i> Rejected</span>
+            {% else %}
+              <span class="status-badge status-pending"><i class="fas fa-hourglass"></i> Pending</span>
+            {% endif %}
+          </td>
+          <td>
+            <div class="action-cell">
+              {% if r.status == 'Approved' or r.status == 'Rejected' %}
+                <form method="post" action="/change_status/{{r.id}}/Pending" class="d-inline">
+                  <button type="submit" class="btn-action btn-reset" onclick="return confirm('Reset this request to Pending?')">
+                    <i class="fas fa-redo"></i> Reset
+                  </button>
+                </form>
+              {% else %}
+                <form method="post" action="/change_status/{{r.id}}/Approved" class="d-inline">
+                  <button type="submit" class="btn-action btn-approve" onclick="return confirm('Approve this leave request?')">
+                    <i class="fas fa-check"></i> Approve
+                  </button>
+                </form>
+                <form method="post" action="/change_status/{{r.id}}/Rejected" class="d-inline">
+                  <button type="submit" class="btn-action btn-reject" onclick="return confirm('Reject this leave request?')">
+                    <i class="fas fa-times"></i> Reject
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="8">
+            <div class="empty-state">
+              <div class="empty-icon">📭</div>
+              <div>No leave requests found</div>
+            </div>
+          </td>
+        </tr>
+      {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // Initialize stats
+  function updateStats() {
+    const rows = document.querySelectorAll('#tableBody tr[data-status]');
+    let approved = 0, pending = 0, rejected = 0;
+    
+    rows.forEach(row => {
+      const status = row.dataset.status;
+      if (status === 'Approved') approved++;
+      else if (status === 'Pending') pending++;
+      else if (status === 'Rejected') rejected++;
+    });
+    
+    document.getElementById('approvedCount').textContent = approved;
+    document.getElementById('pendingCount').textContent = pending;
+    document.getElementById('rejectedCount').textContent = rejected;
+  }
+
+  // Search functionality
+  document.getElementById('searchInput').addEventListener('keyup', function() {
+    const searchText = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#tableBody tr[data-employee]');
+    
+    rows.forEach(row => {
+      const employee = row.dataset.employee.toLowerCase();
+      row.style.display = employee.includes(searchText) ? '' : 'none';
+    });
+  });
+
+  // Filter functionality
+  function filterByStatus(status) {
+    const rows = document.querySelectorAll('#tableBody tr[data-status]');
+    
+    document.querySelectorAll('.filter-badge').forEach(badge => {
+      badge.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    rows.forEach(row => {
+      if (status === 'All' || row.dataset.status === status) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  // Initialize on page load
+  updateStats();
+</script>
+</body>
+</html>
