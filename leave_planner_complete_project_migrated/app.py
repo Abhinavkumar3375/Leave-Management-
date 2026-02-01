@@ -31,7 +31,7 @@ def safe_role(r):
         return "superadmin"
     return "employee"
 
-# --- DB init / seed ---
+# --- DB------Data----------
 def init_db():
     conn = get_db(); cur = conn.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS users(
