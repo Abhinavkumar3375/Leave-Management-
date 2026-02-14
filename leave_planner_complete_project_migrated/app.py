@@ -9,6 +9,9 @@ app.secret_key = "leave_planner_secret_2025"
 DB = "db.sqlite"
 
 # --- helpers ----------------------
+
+
+# MODEL SECTION OF THE PAGE =------------
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
