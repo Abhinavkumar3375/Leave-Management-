@@ -83,7 +83,7 @@ def init_db():
 with app.app_context():
     init_db()
 
-# --- migration (safe, idempotent) ---
+# --- migration (safe, idempotent) ---..........
 def migrate_leaves_table():
     conn = get_db(); cur = conn.cursor()
     try:
