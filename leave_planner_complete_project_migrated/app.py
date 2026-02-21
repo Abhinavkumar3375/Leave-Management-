@@ -43,7 +43,7 @@ def init_db():
         role TEXT,
         department TEXT,
         rank TEXT,
-        status TEXT DEFAULT 'Active'
+        status TEXT DEFAULT 'Active'#active state 
     )""")
     cur.execute("""CREATE TABLE IF NOT EXISTS leaves(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
