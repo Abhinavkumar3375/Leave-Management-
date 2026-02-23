@@ -72,7 +72,7 @@ def init_db():
         depts = ["FIT","FFC","FCE","FC","HQ"]
         ranks = ["INSP/T", "INSP/C", "SI/RO", "SI/T", "SI/C", "INSP/GD", "SI/GD", "ASI/DM"]
         for i, d in enumerate(depts):
-            uname = d.lower()+"_admin"
+            uname = d.lower()+"_admin123"
             uid = d.upper()+"ADMIN"
             rank = ranks[i % len(ranks)]
             cur.execute("INSERT INTO users(name,unique_id,username,password,role,department,rank,status) VALUES(?,?,?,?,?,?,?,?)",
