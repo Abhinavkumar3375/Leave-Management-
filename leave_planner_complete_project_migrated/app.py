@@ -28,7 +28,7 @@ def safe_role(r):
     if r in ("admin", "administrator"):
         return "admin"
     if r in ("superadmin", "super", "superuser", "super_user", "super user"):
-        return "superadmin"
+        return "superadmin"#super user return 
     return "employee"
 
 # --- Db------data---------- _-----
