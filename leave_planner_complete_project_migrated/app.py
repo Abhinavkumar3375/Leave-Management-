@@ -21,7 +21,7 @@ def safe_role(r):
     Accept many variants and fallback to 'employee'.
     """
     if not r:
-        return "employee"
+        return "employee" #return the employee 
     r = r.strip().lower()
     if r in ("employee", "user", "staff"):
         return "employee"
